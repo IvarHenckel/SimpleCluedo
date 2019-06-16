@@ -21,5 +21,12 @@ namespace CluedoTester
             c = new Room("Kitchen");
             Assert.AreEqual("Kitchen", c.ToString());
         }
+
+        [Test]
+        public void TestInit()
+        {
+            Program.InitBoard();
+            Program.HandOutCards();
+        }
     }
 }
