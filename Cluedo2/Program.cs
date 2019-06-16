@@ -8,7 +8,7 @@ namespace Cluedo2
 {
     public class Program
     {
-        private static Room[,] gameBoard = new Room[25, 25];
+        private static Card[,] gameBoard = new Card[25, 25];
         private static List<Player> players = new List<Player>();
         private static Card crimeScene;
         private static Card killer;
@@ -17,19 +17,48 @@ namespace Cluedo2
         {
             InitBoard();
             HandOutCards();
+            Console.WriteLine("Välkommen till Cluedo!");
+            bool quit = false;
+            int currentPlayer = 0;
+            while (!quit) {
+                Console.WriteLine("Spelare " + currentPlayer + ":s tur. Vad vill du göra?" + "\n" + 
+                                   "1. Gissa mördare." + "\n" + 
+                                   "2. Slå tärning");
+                string ans = Console.ReadLine();
+                if (ans == "1")
+                {
+                    // makeGuess();
+                }
+                else
+                {
+                    printBoard();
+                    bool moved = false;
+                    while (!moved)
+                    {
+                        int steps = rollDie();
+                        Console.WriteLine("Du slog " + steps + ". Vart vill du gå?" + "\n" + "x-koordinat?");
+                        int x = int.Parse(Console.ReadLine());
+                        Console.WriteLine("y - koordinat ? ");
+                        int y = int.Parse(Console.ReadLine());
+                        moved = players[currentPlayer].SetPos(steps, x, y);
+                    }
+                    currentPlayer = (currentPlayer + 1) % players.Count();
+                }
+              
+            }
         }
 
         public static void InitBoard()
         {
             gameBoard[0, 0] = new Room("Arbetsrummet");
-            gameBoard[11, 7] = new Room("Hallen");
-            gameBoard[18, 6] = new Room("Lounge?");
-            gameBoard[3, 11] = new Room("Biblioteket");
-            gameBoard[5, 16] = new Room("Biljardrummet");
-            gameBoard[5, 20] = new Room("Vinterträdgården");
-            gameBoard[9, 17] = new Room("Danssalongen");
-            gameBoard[18, 10] = new Room("Lounge?");
-            gameBoard[21, 18] = new Room("Lounge?");
+            gameBoard[7, 11] = new Room("Hallen");
+            gameBoard[6, 18] = new Room("Lounge?");
+            gameBoard[11, 3] = new Room("Biblioteket");
+            gameBoard[16, 5] = new Room("Biljardrummet");
+            gameBoard[20, 5] = new Room("Vinterträdgården");
+            gameBoard[17, 9] = new Room("Danssalongen");
+            gameBoard[10, 18] = new Room("Lounge?");
+            gameBoard[18, 21] = new Room("Lounge?");
         }
 
         public static void HandOutCards()
@@ -85,8 +114,47 @@ namespace Cluedo2
                 }
             }
 
-            players.Add(new Player(p1Cards));
-            players.Add(new Player(p2Cards));
+            players.Add(new Player(p1Cards, new Person("Fru Vit"), 14, 24));
+            players.Add(new Player(p2Cards, new Person("Överste Senap"), 24, 7));
+            
+        }
+
+        private static int rollDie()
+        {
+            Random rnd = new Random();
+            return (rnd.Next(6) + 1) + (rnd.Next(6) + 1);
+        }
+
+        private static void printBoard()
+        {
+            StringBuilder sb = new StringBuilder();
+            for (int i = 0; i < gameBoard.GetLength(0); i++)
+            {
+                for (int j = 0; j < gameBoard.GetLength(1); j++)
+                {
+                    if (gameBoard[i, j] == null)
+                    {
+                        for (int p = 0; p < players.Count(); p++)
+                        {
+                            if (players[p].getX() == j && players[p].getY() == i)
+                            {
+                                sb.Append("|P|"); //Om jag tänkt rätt nu så kommer två spleare på samma ruta bara stå som |P|
+                                break;
+                            }
+                            else if (p == players.Count - 1)
+                            {
+                                sb.Append("|_|");
+                            }
+                        }
+                    }
+                    else if (gameBoard[i, j].GetType() == typeof(Room))
+                    {
+                        sb.Append("|R|");
+                    }
+                }
+                sb.Append("\n");
+            }
+            Console.WriteLine(sb.ToString());
         }
     }
 }
