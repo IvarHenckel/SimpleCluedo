@@ -22,11 +22,25 @@ namespace Cluedo2
                 string ans = Console.ReadLine();
                 if (ans == "1")
                 {
-                    // makeGuess();
+                    Console.WriteLine("Vem är mördaren?");
+                    string killer = Console.ReadLine();
+                    Console.WriteLine("Vart skedde mordet?");
+                    string crimeScene = Console.ReadLine();
+                    Console.WriteLine("Vad är mordvapnet?");
+                    string killersWeapon = Console.ReadLine();
+                    if (game.MakeGuess(killer, crimeScene, killersWeapon))
+                    {
+                        Console.WriteLine(game.GetCurrentPlayer() + "vann spelet!");
+                    }
+                    else
+                    {
+                        Console.WriteLine(game.GetCurrentPlayer() + "förlorade spelet!");
+                        game.NextPlayer();
+                    }
                 }
                 else
                 {
-                    game.printBoard();
+                    Console.WriteLine(game.BoardToString());
                     bool moved = false;
                     while (!moved)
                     {
@@ -39,7 +53,6 @@ namespace Cluedo2
                     }
                     game.NextPlayer();
                 }
-              
             }
         }
     }

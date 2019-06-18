@@ -40,8 +40,19 @@ namespace CluedoTester
         [Test]
         public void TestMovePlayer()
         {
+            string s1 = g.BoardToString();
             Assert.False(g.MoveCurrentPlayer(1, 0, 0), "Player one should not be able to move that far.");
+            string s2 = g.BoardToString();
+            Assert.AreEqual(s1, s2);
             Assert.True(g.MoveCurrentPlayer(10, 9, 19), "Player one should be able to move to position (9,19) with 10 steps.");
+            string s3 = g.BoardToString();
+            Assert.AreNotEqual(s1, s3);
+        }
+
+        [Test]
+        public void TestMakeGuess()
+        {
+            Assert.IsFalse(g.MakeGuess("Kalle", "Frysrummet", ""), "This should be false since none of the Cards exist.");
         }
     }
 }
