@@ -117,7 +117,7 @@ namespace Cluedo2
 
         }
 
-        public void printBoard()
+        public string BoardToString() // Borde lägga till vid sidan rad och kulomn så ma  slipper räkna
         {
             StringBuilder sb = new StringBuilder();
             for (int i = 0; i < gameBoard.GetLength(0); i++)
@@ -146,8 +146,18 @@ namespace Cluedo2
                 }
                 sb.Append("\n");
             }
-            Console.WriteLine(sb.ToString());
+            return sb.ToString();
+        }
+
+        public bool MakeGuess(string killer, string crimeScene, string weapon)
+        {
+            if ((new Person(killer)).Equals(this.killer) && (new Person(crimeScene)).Equals(this.crimeScene) && (new Person(weapon)).Equals(this.killersWeapon))
+            {
+                quit = true;
+                return true;
+            }
+            return false; // Om gissningen är fel borde jag ju även egentligen ta bort spelaren
+
         }
     }
-
 }

@@ -18,5 +18,14 @@ namespace Cluedo2
         {
             return name;
         }
+
+        public override bool Equals(object obj)
+        {
+            if (obj.GetType() == this.GetType())
+            {
+                return this.name == ((Card)obj).name;
+            }
+            return false;
+        }
     }
 }
