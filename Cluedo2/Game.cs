@@ -9,7 +9,7 @@ namespace Cluedo2
 
     public class Game
     {
-        private int currentPlayer;
+        private int currentPlayer = 0;
         private bool quit = false;
         private Card[,] gameBoard = new Card[25, 25];
         private List<Player> players = new List<Player>();
@@ -27,7 +27,7 @@ namespace Cluedo2
 
         public int GetCurrentPlayer()
         {
-            return currentPlayer;
+            return currentPlayer + 1;
         }
 
         public void NextPlayer()
