@@ -28,7 +28,7 @@ namespace Cluedo2
                     string crimeScene = Console.ReadLine();
                     Console.WriteLine("Vad är mordvapnet?");
                     string killersWeapon = Console.ReadLine();
-                    if (game.MakeGuess(killer, crimeScene, killersWeapon))
+                    if (game.MakeFinalGuess(killer, crimeScene, killersWeapon))
                     {
                         Console.WriteLine(game.GetCurrentPlayer() + "vann spelet!");
                     }
@@ -50,6 +50,20 @@ namespace Cluedo2
                         Console.WriteLine("y - koordinat ? ");
                         int y = int.Parse(Console.ReadLine());
                         moved = game.MoveCurrentPlayer(steps, x, y);
+                    }
+                    if (game.CanMakeGuess())
+                    {
+                        Console.WriteLine("Detta är dina kort:");
+                        Console.WriteLine(game.GetCurrentPlayer().HandString());
+                        Console.WriteLine("Vem är mördaren?");
+                        string killer = Console.ReadLine();
+                        Console.WriteLine("Vad är mordvapnet?");
+                        string killersWeapon = Console.ReadLine();
+                        Console.WriteLine("Dessa kort visade dina motståndare");
+                        foreach (Card c in game.MakeGuess(killer, killersWeapon))
+                        {
+                            Console.WriteLine(c);
+                        }
                     }
                     game.NextPlayer();
                 }

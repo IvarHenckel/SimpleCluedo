@@ -9,7 +9,8 @@ namespace Cluedo2
 
     public class Game
     {
-        private int currentPlayer = 0;
+        private int index = 0;
+        private Player currentPlayer;
         private bool quit = false;
         private Card[,] gameBoard = new Card[25, 25];
         private List<Player> players = new List<Player>();
@@ -25,19 +26,20 @@ namespace Cluedo2
             return quit;
         }
 
-        public int GetCurrentPlayer()
+        public Player GetCurrentPlayer()
         {
-            return currentPlayer + 1;
+            return currentPlayer;
         }
 
         public void NextPlayer()
         {
-            currentPlayer = (currentPlayer + 1) % players.Count();
+            index = (index + 1) % players.Count();
+            currentPlayer = players[index];
         }
 
         public bool MoveCurrentPlayer(int steps, int x, int y)
         {
-            return players[currentPlayer].SetPos(steps, x, y);
+            return currentPlayer.SetPos(steps, x, y);
         }
 
         public int RollDie()
@@ -90,8 +92,11 @@ namespace Cluedo2
 
             Random rnd = new Random();
             crimeScene = roomCards.ElementAt(rnd.Next(roomCards.Count()));
+            roomCards.Remove(crimeScene);
             killer = personCards.ElementAt(rnd.Next(personCards.Count()));
+            personCards.Remove(killer);
             killersWeapon = weaponCards.ElementAt(rnd.Next(weaponCards.Count()));
+            weaponCards.Remove(killersWeapon);
 
             List<Card> cards = new List<Card>(roomCards);
             cards.AddRange(weaponCards);
@@ -112,9 +117,9 @@ namespace Cluedo2
                 }
             }
 
-            players.Add(new Player(p1Cards, new Person("Fru Vit"), 14, 24));
-            players.Add(new Player(p2Cards, new Person("Överste Senap"), 24, 7));
-
+            players.Add(new Player(p1Cards, new Person("Fru Vit"), 14, 24, 1));
+            players.Add(new Player(p2Cards, new Person("Överste Senap"), 24, 7, 2));
+            currentPlayer = players[0];
         }
 
         public string BoardToString() // Borde lägga till vid sidan rad och kulomn så ma  slipper räkna
@@ -149,9 +154,33 @@ namespace Cluedo2
             return sb.ToString();
         }
 
-        public bool MakeGuess(string killer, string crimeScene, string weapon)
+        public bool CanMakeGuess()
         {
-            if ((new Person(killer)).Equals(this.killer) && (new Person(crimeScene)).Equals(this.crimeScene) && (new Person(weapon)).Equals(this.killersWeapon))
+            Card currentRoom = gameBoard[currentPlayer.getY(), currentPlayer.getX()];
+            return (currentRoom != null);
+        }
+
+        public List<Card> MakeGuess(string killer, string weapon)
+        {
+            Card crimeScene = gameBoard[currentPlayer.getY(), currentPlayer.getX()];
+            List<Card> ret = new List<Card>();
+            foreach(Player p in players )
+            {
+                if (!p.Equals(currentPlayer))// än så länge får man inte välja vilket kort man skall skicka
+                {
+                    List<Card> guess = new List<Card>();
+                    guess.Add(new Person("Killer"));
+                    guess.Add(crimeScene);
+                    guess.Add(new Weapon("weapon"));
+                    p.PickCard(ret, guess);
+                }
+            }
+            return ret;
+        }
+
+        public bool MakeFinalGuess(string killer, string crimeScene, string weapon)
+        {
+            if ((new Person(killer)).Equals(this.killer) && (new Room(crimeScene)).Equals(this.crimeScene) && (new Weapon(weapon)).Equals(this.killersWeapon))
             {
                 quit = true;
                 return true;
