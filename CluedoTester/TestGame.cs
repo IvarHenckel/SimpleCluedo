@@ -23,8 +23,9 @@ namespace CluedoTester
         [Test]
         public void TestInit()
         {
+            Assert.IsFalse(g.CanMakeGuess(), "Should not stand in a room on the first turn.");
             Assert.IsFalse(g.Quit(), "Game should not be quit at the beginning.");
-            Assert.AreEqual(g.GetCurrentPlayer(), 1, "The first player should be player 1.");
+            Assert.AreEqual(g.GetCurrentPlayer().GetNumber(), 1, "The first player should be player 1.");
         }
 
         [Test]
@@ -32,9 +33,9 @@ namespace CluedoTester
         {
             g.NextPlayer();
             g.NextPlayer();
-            Assert.AreEqual(g.GetCurrentPlayer(), 1, "Should start on player one again with 2 players");
+            Assert.AreEqual(g.GetCurrentPlayer().GetNumber(), 1, "Should start on player one again with 2 players");
             g.NextPlayer();
-            Assert.AreEqual(g.GetCurrentPlayer(), 2, "Should now be player 2:s turn.");
+            Assert.AreEqual(g.GetCurrentPlayer().GetNumber(), 2, "Should now be player 2:s turn.");
         }
 
         [Test]
@@ -50,9 +51,22 @@ namespace CluedoTester
         }
 
         [Test]
+        public void TestMakeFinalGuess()
+        {
+            Assert.IsFalse(g.MakeFinalGuess("Kalle", "Frysrummet", ""), "This should be false since none of the Cards exist.");
+        }
+
+        [Test]
+        public void TestCanGuess()
+        {
+            Assert.IsFalse(g.CanMakeGuess(), "Player one is not standning in a room at the start.");
+        }
+
+        [Test]
         public void TestMakeGuess()
         {
-            Assert.IsFalse(g.MakeGuess("Kalle", "Frysrummet", ""), "This should be false since none of the Cards exist.");
+            g.GetCurrentPlayer().SetPos(100, 0, 0);
+            Assert.IsEmpty(g.MakeGuess("",""), "Should be fine to guess, but no cards are empty so no cards will be shown.");
         }
     }
 }
