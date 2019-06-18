@@ -16,7 +16,7 @@ namespace Cluedo2
             game.HandOutCards();
             Console.WriteLine("Välkommen till Cluedo!");
             while (!game.Quit()) {
-                Console.WriteLine("Spelare " + (game.GetCurrentPlayer() + 1) + ":s tur. Vad vill du göra?" + "\n" + 
+                Console.WriteLine("Spelare " + game.GetCurrentPlayer() + ":s tur. Vad vill du göra?" + "\n" + 
                                    "1. Gissa mördare." + "\n" + 
                                    "2. Slå tärning");
                 string ans = Console.ReadLine();

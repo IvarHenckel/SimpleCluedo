@@ -22,7 +22,7 @@ namespace Cluedo2
 
         public bool SetPos(int steps, int x, int y)
         {
-            if (Math.Abs(this.x - x) + Math.Abs(this.y - y) < steps)
+            if (Math.Abs(this.x - x) + Math.Abs(this.y - y) <= steps)
             {
                 this.x = x;
                 this.y = y;
