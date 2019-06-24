@@ -42,9 +42,9 @@ namespace Cluedo2
                 {
                     Console.WriteLine(game.BoardToString());
                     bool moved = false;
+                    int steps = game.RollDie();
                     while (!moved)
                     {
-                        int steps = game.RollDie();
                         Console.WriteLine("Du slog " + steps + ". Vart vill du gå?" + "\n" + "x-koordinat?");
                         int x = int.Parse(Console.ReadLine());
                         Console.WriteLine("y - koordinat ? ");

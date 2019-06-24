@@ -125,8 +125,16 @@ namespace Cluedo2
         public string BoardToString() // Borde lägga till vid sidan rad och kulomn så ma  slipper räkna
         {
             StringBuilder sb = new StringBuilder();
+            sb.Append("    0  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24");
+            sb.AppendLine();
             for (int i = 0; i < gameBoard.GetLength(0); i++)
             {
+                sb.Append(i);
+                sb.Append(" ");
+                if (i < 10)
+                {
+                    sb.Append(" ");
+                }
                 for (int j = 0; j < gameBoard.GetLength(1); j++)
                 {
                     if (gameBoard[i, j] == null)
